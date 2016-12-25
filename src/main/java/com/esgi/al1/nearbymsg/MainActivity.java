@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         Log.i("MyApp", "connected");
         //test commit roman
         //Test Chris
+        //Test Chris 2
 
     }
 
