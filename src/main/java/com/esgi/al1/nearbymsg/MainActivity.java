@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         Toast.makeText(this, "connected", Toast.LENGTH_SHORT).show();
         Log.i("MyApp", "connected");
         //test commit roman
+        //Test Chris
 
     }
 
