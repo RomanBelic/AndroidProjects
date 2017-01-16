@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //test commit roman
         //Test Chris
         //Test Chris 2
-
+        //Connexion
     }
 
     @Override
