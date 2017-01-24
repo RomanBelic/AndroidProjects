@@ -1,49 +1,51 @@
 package com.esgi.al1.nearbymsg;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.*;
-import com.google.android.gms.nearby.Nearby;
+import com.esgi.al1.nearbymsg.entities.Device;
+import com.esgi.al1.nearbymsg.interfaces.Callable.CallableByFragment;
+import com.esgi.al1.nearbymsg.ui_fragments.DeviceListFragment;
 
-public class MainActivity extends AppCompatActivity implements ConnectionCallbacks,OnConnectionFailedListener {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity  {
+
+    private CallableByFragment callable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Test du clsient
-        Log.i("MyApp", "created");
-        GoogleApiClient  mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Nearby.MESSAGES_API)
-                .addConnectionCallbacks(this)
-                .enableAutoManage(this, this)
-                .build();
+
+        initInterfaces();
+
+        DeviceListFragment frag = DeviceListFragment.createNewInstance(getIntent().getExtras(), callable);
+        getFragmentManager().
+                beginTransaction().
+                replace(R.id.device_widgetview_container, frag, DeviceListFragment.TAG).
+                commit();
+
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Toast.makeText(this, "connected", Toast.LENGTH_SHORT).show();
-        Log.i("MyApp", "connected");
-        //test commit roman
-        //Test Chris
-        //Test Chris 2
-        //Connexion
+    public void loadDiscussionActivity(Bundle bundle) {
+        Object result;
+        if ((result = bundle.getSerializable(Device.Tag)) instanceof ArrayList<?>){
+            ArrayList<?> source = (ArrayList<?>) result;
+            if (source.size() > 0 && source.get(0) instanceof Device) {
+                ArrayList<Device> lstSelectedDevs = (ArrayList<Device>) source;
+                Toast.makeText(this, "Selected " + lstSelectedDevs.size(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i("MyApp", "suspeded");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i("MyApp", "failed");
+    private void initInterfaces(){
+        callable = new CallableByFragment(){
+            @Override
+            public void onDevicesSelected(Bundle bundle) {
+                loadDiscussionActivity(bundle);
+            }
+        };
     }
 }
