@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.esgi.al1.nearbymsg.R;
 import com.esgi.al1.nearbymsg.entities.Device;
-import com.esgi.al1.nearbymsg.interfaces.Callable.CallableByFragment;
+import com.esgi.al1.nearbymsg.interfaces.Callable.DeviceFragmentListener;
 import com.esgi.al1.nearbymsg.ui_adapters.DeviceViewAdapter;
 import com.esgi.al1.nearbymsg.ui_widgets.DeviceListView;
 
@@ -25,11 +26,23 @@ public class DeviceListFragment extends Fragment {
 
     public static final String TAG = "DeviceListFrag";
     public static final int Id = 0x99;
-    private CallableByFragment callable;
+    private DeviceFragmentListener callable;
+    private int pageCount;
+    private int pageSize;
+    private List<Device> lstDevice;
+    private DeviceViewAdapter adapter;
 
-    public static DeviceListFragment createNewInstance(Bundle args, CallableByFragment callable){
+    public List<Device> getLstDevice() {
+        return lstDevice;
+    }
+
+    public DeviceViewAdapter getAdapter() {
+        return adapter;
+    }
+
+    public static DeviceListFragment createNewInstance(Bundle extras, DeviceFragmentListener callable){
         DeviceListFragment frag = new DeviceListFragment();
-        frag.setArguments(args);
+        frag.setArguments(extras);
         frag.callable = callable;
         return frag;
     }
@@ -43,36 +56,93 @@ public class DeviceListFragment extends Fragment {
     }
 
     private void initComponents (final View ui){
-        final Button btnStartDisc = (Button)ui.findViewById(R.id.btnStartDiscussion);
-        btnStartDisc.setOnClickListener(new View.OnClickListener() {
+        pageCount = 0;
+        pageSize = 5;
+        lstDevice = new ArrayList<>(64);
+        for (int i = 0; i < 64;i++){
+            lstDevice.add(new Device("i" + i, "i" + i));
+        }
+        DeviceListView lvDevices = (DeviceListView) ui.findViewById(R.id.lstV_AvailableDevices);
+        adapter = new DeviceViewAdapter(lstDevice, getActivity(), pageSize);
+        lvDevices.setAdapter(adapter);
+
+        Button btnStartDisc = (Button)ui.findViewById(R.id.btnStartDiscussion);
+        btnStartDisc.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onStartDiscPressed(btnStartDisc, ui);
+                ArrayList<Device> lstChecked = new ArrayList<>(64);
+                for(int i = 0; i < adapter.getCheckedArr().size(); i++) {
+                    int itemIndex = adapter.getCheckedArr().keyAt(i);
+                    Device d = lstDevice.get(itemIndex);
+                    lstChecked.add(d);
+                }
+                if (lstChecked.size() > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Device.Tag,lstChecked);
+                    callable.onDevicesSelected(bundle);
+                }
             }}
         );
-        List<Device> lstDevices = new ArrayList<Device>(64);
-        DeviceListView lvDevices = (DeviceListView)ui.findViewById(R.id.lstV_AvailableDevices);
-        for (int i = 0; i< 64;i++){
-            lstDevices.add(new Device("id" + i,"name" + i));
-        }
-        DeviceViewAdapter adapter = new DeviceViewAdapter(lstDevices, ui.getContext());
-        lvDevices.setAdapter(adapter);
-    }
 
-    private void onStartDiscPressed(Button sender, View root){
-        DeviceListView lvDevices = (DeviceListView)root.findViewById(R.id.lstV_AvailableDevices);
-        DeviceViewAdapter adapter = (DeviceViewAdapter) lvDevices.getAdapter();
-        ArrayList<Device> lstChecked = new ArrayList<>(64);
+        Button btnNext = (Button) ui.findViewById(R.id.btnNext);
+        btnNext.setOnClickListener(new OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               int pageLim = lstDevice.size() / pageSize - 1;
+               if (pageCount < pageLim) {
+                   pageCount ++;
+                   adapter.setPageIndex(pageCount);
+                   int startPos = pageCount * pageSize;
+                   int endPos = startPos + pageSize;
+                   List<Device> lstTemp = new ArrayList<>(lstDevice.size());
+                   for (; startPos < endPos; startPos++) {
+                       if ((lstDevice.size() - startPos) == 0)
+                           break;
+                       Device d = lstDevice.get(startPos);
+                       lstTemp.add(d);
+                   }
+                   adapter.setLstSource(lstTemp);
+                   adapter.notifyDataSetChanged();
+               }
+           }
+        });
 
-        for(int i = 0; i < adapter.getCheckedArr().size(); i++) {
-            Device d = adapter.getSource().get(i);
-            lstChecked.add(d);
-        }
-        if (lstChecked.size() > 0) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(Device.Tag,lstChecked);
-            this.callable.onDevicesSelected(bundle);
-        }
+        Button btnPrev = (Button) ui.findViewById(R.id.btnPrevious);
+        btnPrev.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pageCount > 0) {
+                    pageCount --;
+                    adapter.setPageIndex(pageCount);
+                    int startPos = pageCount * pageSize;
+                    int endPos = startPos + pageSize;
+                    List<Device> lstTemp = new ArrayList<>(lstDevice.size());
+                    for (; startPos < endPos; startPos++) {
+                        Device d = lstDevice.get(startPos);
+                        lstTemp.add(d);
+                    }
+                    adapter.setLstSource(lstTemp);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        Button btnRefr = (Button)ui.findViewById(R.id.btnRefresh);
+        btnRefr.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageCount = 0;
+                adapter.setPageIndex(0);
+                adapter.getCheckedArr().clear();
+                List<Device> tmpDevice = new ArrayList(pageSize);
+                for (int i = 0; i < pageSize; i++){
+                    tmpDevice.add(lstDevice.get(i));
+                }
+                adapter.setLstSource(tmpDevice);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
 }

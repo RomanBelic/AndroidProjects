@@ -2,5 +2,14 @@
     <string name="app_name">NearbyMsg</string>
     <string name="text_empty">text_empty</string>
     <string name="str_startDiscussion">Commencer la discussion</string>
-
+    <string name="appwidget_StartText">Démarrer</string>
+    <string name="appwidget_StopText">Arrêter</string>
+    <string name="appwidget_DeviceFoundText">Appareils trouvés</string>
+    <string name="add_widget">Add widget</string>
+    <string name="service_id">NearbyService</string>
+    <string name="strNoNetworkDetected">Aucun réseau détecté</string>
+    <string name="strCheckNetwork">Activer Réseau</string>
+    <string name="strNext">Suivant</string>
+    <string name="strPrevious">Précéd.</string>
+    <string name="strRefesh">Refraichir</string>
 </resources>
