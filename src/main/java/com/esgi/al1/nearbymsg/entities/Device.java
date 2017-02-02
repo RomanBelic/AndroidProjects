@@ -9,17 +9,23 @@ import java.io.Serializable;
  */
 
 public class Device implements Serializable {
+    public static final String TABLE_NAME="DEVICE";
+    public static final String ID = "_IDDEVICE";
+    public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
+    public static final String NAME = "NAME";
 
     public static final String Tag = "Device";
 
     private String account;
     private String name;
+    private long id;
 
     public Device (){
 
     }
 
-    public Device(String newAccount, String newName) {
+    public Device(long id, String newAccount, String newName) {
+        this.id = id;
         this.account = newAccount;
         this.name = newName;
     }
@@ -29,8 +35,15 @@ public class Device implements Serializable {
         name = in.readString();
     }
 
-    public String getAccount() {
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id){
+        this.id = id;
+    }
+
+    public String getAccount() {
         return account;
     }
 

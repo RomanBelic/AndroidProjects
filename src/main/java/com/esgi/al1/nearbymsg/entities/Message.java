@@ -7,12 +7,32 @@ import java.util.Date;
  */
 
 public class Message {
+    public static final String TABLE_NAME = "MESSAGE";
+    public static final String ID = "_IDMESSAGE";
+    public static final String ID_DEVICE = "_IDDEVICE";
+    public static final String ID_DISCUSSION = "DISCUSSION";
+    public static final String BODY = "BODY";
+    public static final String DATE_MESSAGE = "DATE_MESSAGE";
 
-    private int id;
+    private long id;
+    private long idDevice;
+    private long idDiscussion;
     private Date dateEnvoye;
     private String body;
     private boolean hasAttachement;
     private Device sender;
+
+    public Message(){
+
+    }
+
+    public Message(long id, long idDevice, long idDiscussion, String body, Date today){
+        this.id = id;
+        this.idDevice = idDevice;
+        this.idDiscussion = idDiscussion;
+        this.body = body;
+        this.dateEnvoye = today;
+    }
 
     public FileAttachement getAttachement() {
         return attachement;
@@ -24,12 +44,28 @@ public class Message {
 
     private FileAttachement attachement;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public long getIdDevice() {
+        return idDevice;
+    }
+
+    public long getIdDiscussion() {
+        return idDiscussion;
+    }
+
+    public void setIdDiscussion(long idDiscussion) {
+        this.idDiscussion = idDiscussion;
+    }
+
+    public void setIdDevice(long idDevice) {
+        this.idDevice = idDevice;
     }
 
     public Date getDateEnvoye() {
