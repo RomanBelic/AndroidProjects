@@ -63,4 +63,14 @@ public class Message {
     public void setSender(Device sender) {
         this.sender = sender;
     }
+
+    @Override
+    public int hashCode() {
+        return String.valueOf(id).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Message && ((Message)obj).getId() == id);
+    }
 }

@@ -9,6 +9,15 @@ public class FileAttachement {
     private String extension;
     private String name;
     private byte [] content;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getExtension() {
         return extension;
@@ -32,5 +41,15 @@ public class FileAttachement {
 
     public void setContent(byte[] content) {
         this.content = content;
+    }
+
+    @Override
+    public int hashCode() {
+        return String.valueOf(id).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof FileAttachement && ((FileAttachement)obj).getId() == id);
     }
 }

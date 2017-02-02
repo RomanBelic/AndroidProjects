@@ -18,15 +18,6 @@ public class GenericAdapter<T> extends BaseAdapter {
     private final int layoutId;
     private final LayoutInflater inflater;
 
-    public void setSource(List<T> lstSource) {
-        this.lstSource = lstSource;
-    }
-
-    public List<T> getSource() {
-        return lstSource;
-    }
-
-
     GenericAdapter(List<T> lstDevice, Context context, int layoutId){
         this.lstSource = lstDevice;
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -53,6 +44,14 @@ public class GenericAdapter<T> extends BaseAdapter {
     }
 
     void initRow(T object, View row, int position){}
+
+    public List<T> getLstSource() {
+        return lstSource;
+    }
+
+    public void setLstSource(List<T> lstSource) {
+        this.lstSource = lstSource;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

@@ -12,9 +12,14 @@
         android:id="@+id/device_widgetview_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
         tools:layout="@layout/device_widgetview_layout">
     </fragment>
 
+    <fragment
+        android:name="com.esgi.al1.nearbymsg.ui_fragments.ActivateNetworkFragment"
+        android:id="@+id/network_check_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/network_dialog_layout">
+    </fragment>
 </LinearLayout>

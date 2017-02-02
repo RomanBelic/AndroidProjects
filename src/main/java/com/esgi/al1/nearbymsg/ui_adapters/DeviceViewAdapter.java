@@ -18,23 +18,40 @@ import java.util.List;
 public class DeviceViewAdapter extends GenericAdapter<Device> {
 
     private final SparseBooleanArray checkedArr;
-    private Context cont;
+    private final int pagingSize;
+
+    private int pageIndex;
+
+    public void setPageIndex(int pageIndex) {
+        this.pageIndex = pageIndex;
+    }
+
+    public DeviceViewAdapter(List<Device> lstDevice, Context context, int pagingSize) {
+        super(lstDevice, context, R.layout.device_listview_layout);
+        this.checkedArr = new SparseBooleanArray(lstDevice.size());
+        this.pagingSize = pagingSize;
+        this.pageIndex = 0;
+    }
+
     public DeviceViewAdapter(List<Device> lstDevice, Context context) {
         super(lstDevice, context, R.layout.device_listview_layout);
-        checkedArr = new SparseBooleanArray(lstDevice.size());
-        cont = context;
+        this.checkedArr = new SparseBooleanArray(lstDevice.size());
+        this.pagingSize = this.pageIndex = 0;
     }
 
     @Override
-    protected void initRow(Device device, View row, final int position) {
+    protected void initRow(Device device, View row, int position) {
+        final int pagePos = pageIndex * pagingSize + position;
         TextView tvDevName = (TextView)row.findViewById(R.id.tvDeviceName);
         tvDevName.setText(device.getName());
         final CheckBox chk = (CheckBox)row.findViewById(R.id.chkDevice);
-        chk.setChecked(checkedArr.get(position, false));
+        chk.setChecked(checkedArr.get(pagePos, false));
         chk.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
                 if (chk.isChecked())
-                    checkedArr.put(position, true);
+                    checkedArr.put(pagePos, true);
+                else
+                    checkedArr.delete(pagePos);
             }
         });
     }
@@ -42,7 +59,6 @@ public class DeviceViewAdapter extends GenericAdapter<Device> {
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
-        checkedArr.clear();
     }
 
     public SparseBooleanArray getCheckedArr() {
@@ -51,7 +67,7 @@ public class DeviceViewAdapter extends GenericAdapter<Device> {
 
     @Override
     public void notifyDataSetInvalidated() {
-        super.notifyDataSetInvalidated();
         checkedArr.clear();
+        super.notifyDataSetInvalidated();
     }
 }
