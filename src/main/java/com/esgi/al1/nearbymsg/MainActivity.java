@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onEndpointFound(String endpointId, String deviceId, String serviceId, String name) {
         if (serviceId == getString(R.string.service_id)) {
-            Device d = new Device(deviceId, name);
+            Device d = new Device(0, deviceId, name);
             if (deviceFrag != null)
                 deviceFrag.onDeviceFound(d);
         }

@@ -59,7 +59,7 @@ public class DeviceListFragment extends Fragment implements DeviceFragmentListen
         pageSize = 5;
         lstDevice = new ArrayList<>(64);
         for (int i = 0; i < 64;i++){
-            lstDevice.add(new Device("i" + i, "i" + i));
+            lstDevice.add(new Device(i, "i" + i, "i" + i));
         }
         DeviceListView lvDevices = (DeviceListView) ui.findViewById(R.id.lstV_AvailableDevices);
         adapter = new DeviceViewAdapter(lstDevice, getActivity(), pageSize);
