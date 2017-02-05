@@ -15,8 +15,7 @@
         android:theme="@style/AppTheme">
         <receiver android:name=".broadcast_receiver.MessageReceiver">
             <intent-filter>
-                <action android:name="On_Message_Received">
-                </action>
+                <action android:name="@string/On_Message_Received"/>
             </intent-filter>
         </receiver>
 
@@ -34,9 +33,9 @@
         <activity android:name=".DiscussionActivity" />
         <receiver android:name=".DeviceAppWidget">
             <intent-filter>
+                <action android:name="@string/WIDGET_PRESS_ACTION"/>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/device_app_widget_info" />

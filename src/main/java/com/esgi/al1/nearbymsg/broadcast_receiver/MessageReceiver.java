@@ -19,15 +19,15 @@ import com.esgi.al1.nearbymsg.R;
 
 public class MessageReceiver extends BroadcastReceiver {
 
-    public static final String Tag = "On_Message_Received";
     public static final int Id = 0x66;
+
     public MessageReceiver (){
 
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(Tag)){
+        if (intent.getAction().equals(context.getString(R.string.On_Message_Received))){
             Intent resultIntent = new Intent(context, MainActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
             stackBuilder.addParentStack(MainActivity.class);

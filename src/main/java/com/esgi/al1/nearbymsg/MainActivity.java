@@ -61,9 +61,6 @@ public class MainActivity extends AppCompatActivity implements
             beginTransaction().
             replace(R.id.device_widgetview_container, deviceFrag, DeviceListFragment.TAG).
             commit();
-            final String myName = NearbyService.getMyGoogleAccount(this);
-            final String serviceid = getString(R.string.service_id);
-            Button btnStart = (Button) findViewById(R.id.btnStartAdv);
         } else {
             ActivateNetworkFragment frag = ActivateNetworkFragment.createNewInstance(getIntent().getExtras(), netwfragCallable);
             getFragmentManager().
@@ -106,16 +103,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        if (isConnectedNetwork && gClient != null)
-             gClient.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (gClient != null && gClient.isConnected()) {
-            gClient.disconnect();
-        }
     }
 
     private GoogleApiClient initGoogleApiClient (OnConnectionFailedListener failListener, ConnectionCallbacks callback, Context ctx){
@@ -156,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements
             msg += (char)b;
         }
         intent.putExtra("message", msg);
-        intent.setAction(MessageReceiver.Tag);
+        intent.setAction(getString(R.string.On_Message_Received));
         sendBroadcast(intent);
     }
 
@@ -167,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onEndpointFound(String endpointId, String deviceId, String serviceId, String name) {
-        if (serviceId == getString(R.string.service_id)) {
+        if (serviceId.equals(getString(R.string.service_id))) {
             Device d = new Device(0, deviceId, name);
             if (deviceFrag != null)
                 deviceFrag.onDeviceFound(d);
@@ -179,5 +171,19 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent.getAction().equals(getString(R.string.WIDGET_PRESS_ACTION))){
+            if (gClient != null && gClient.isConnected()) {
+                gClient.disconnect();
+                Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show();
+            }
+            else if (gClient != null && !gClient.isConnected()) {
+                gClient.connect();
+                Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show();
+            }
+        }
+        super.onNewIntent(intent);
+    }
 
 }

@@ -53,8 +53,8 @@ public class DiscussionDAO extends Dao<Discussion>{
         while(cursor.moveToNext()){
             long idCursor = cursor.getLong(cursor.getColumnIndex(Discussion.ID));
 
-            discussion = new Discussion(idCursor);
-            Log.i("DATABASE", "Retrieved "+discussion);
+            //discussion = new Discussion((int)idCursor);
+            //Log.i("DATABASE", "Retrieved "+discussion);
         }
         return discussion;
     }
