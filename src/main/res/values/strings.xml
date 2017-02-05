@@ -12,6 +12,9 @@
     <string name="strNext">Suivant</string>
     <string name="strPrevious">Précéd.</string>
     <string name="strRefesh">Refraichir</string>
-    <string name="WIDGET_PRESS_ACTION">WIDGET_ON</string>
+    <string name="strON">ON</string>
+    <string name="strOFF">OFF</string>
+    <string name="WIDGET_RESPONSE_PRESSED">RESPONSE_PRESSED</string>
+    <string name="WIDGET_PRESS_ACTION">WIDGET_PRESSED</string>
     <string name="On_Message_Received">On_Message_Received</string>
 </resources>

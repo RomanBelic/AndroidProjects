@@ -33,7 +33,7 @@
         <activity android:name=".DiscussionActivity" />
         <receiver android:name=".DeviceAppWidget">
             <intent-filter>
-                <action android:name="@string/WIDGET_PRESS_ACTION"/>
+                <action android:name="@string/WIDGET_RESPONSE_PRESSED"/>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data

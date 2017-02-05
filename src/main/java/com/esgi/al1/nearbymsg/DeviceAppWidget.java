@@ -6,7 +6,9 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 /**
  * Implementation of App Widget functionality.
@@ -18,8 +20,6 @@ public class DeviceAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-
-
     }
 
     @Override
@@ -27,7 +27,6 @@ public class DeviceAppWidget extends AppWidgetProvider {
         // There may be multiple widgets active, so update all of them
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int wId : appWidgetIds) {
-
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -38,11 +37,21 @@ public class DeviceAppWidget extends AppWidgetProvider {
             // to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.device_app_widget);
             views.setOnClickPendingIntent(R.id.btnAppWidgetBtn, pendingIntent);
-
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(wId, views);
         }
 
+    }
+
+    public static void UpdateForced(Context ctx, Intent data){
+        AppWidgetManager man = AppWidgetManager.getInstance(ctx);
+        ComponentName comp = new ComponentName(ctx, DeviceAppWidget.class);
+        int[] ids = man.getAppWidgetIds(comp);
+        RemoteViews views = new RemoteViews(comp.getPackageName(), R.layout.device_app_widget);
+        for (int i : ids){
+            views.setTextViewText(R.id.btnAppWidgetBtn, data.getStringExtra("button_update"));
+            man.updateAppWidget(i, views);
+        }
     }
 
     @Override

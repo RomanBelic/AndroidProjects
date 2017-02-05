@@ -9,7 +9,7 @@ import java.sql.Connection;
  */
 
 public abstract class Dao <T> {
-    protected Connection connection;
+    protected final Connection connection;
 
     public Dao(Connection connection){
         this.connection = connection;

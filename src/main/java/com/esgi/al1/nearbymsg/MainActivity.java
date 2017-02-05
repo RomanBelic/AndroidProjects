@@ -1,10 +1,12 @@
 package com.esgi.al1.nearbymsg;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onStartDiscoveringDevice(Status status) {
 
             }
-        };;
+        };
     }
 
     @Override
@@ -111,12 +113,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private GoogleApiClient initGoogleApiClient (OnConnectionFailedListener failListener, ConnectionCallbacks callback, Context ctx){
-        GoogleApiClient client = new GoogleApiClient.Builder(ctx)
+        return new GoogleApiClient.Builder(ctx)
                 .addConnectionCallbacks(callback)
                 .addOnConnectionFailedListener(failListener)
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
-        return client;
     }
 
     @Override
@@ -174,14 +175,18 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onNewIntent(Intent intent) {
         if (intent.getAction().equals(getString(R.string.WIDGET_PRESS_ACTION))){
+            Intent response = new Intent(getString(R.string.WIDGET_RESPONSE_PRESSED));
             if (gClient != null && gClient.isConnected()) {
                 gClient.disconnect();
+                response.putExtra("button_update", getString(R.string.strON));
                 Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show();
             }
             else if (gClient != null && !gClient.isConnected()) {
                 gClient.connect();
+                response.putExtra("button_update", getString(R.string.strOFF));
                 Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show();
             }
+            DeviceAppWidget.UpdateForced(this, response);
         }
         super.onNewIntent(intent);
     }

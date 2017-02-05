@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import com.esgi.al1.nearbymsg.DiscussionActivity;
 import com.esgi.al1.nearbymsg.MainActivity;
 import com.esgi.al1.nearbymsg.R;
 
@@ -20,7 +21,6 @@ import com.esgi.al1.nearbymsg.R;
 public class MessageReceiver extends BroadcastReceiver {
 
     public static final int Id = 0x66;
-
     public MessageReceiver (){
 
     }
@@ -30,7 +30,7 @@ public class MessageReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(context.getString(R.string.On_Message_Received))){
             Intent resultIntent = new Intent(context, MainActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addParentStack(DiscussionActivity.class);
             stackBuilder.addNextIntent(resultIntent);
             PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
