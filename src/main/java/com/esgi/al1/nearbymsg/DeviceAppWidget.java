@@ -1,33 +1,62 @@
 package com.esgi.al1.nearbymsg;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class DeviceAppWidget extends AppWidgetProvider {
 
+    private final int reqCode = 0x55;
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_StartText);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.device_app_widget);
-        views.setTextViewText(R.id.btnAppWidgetBtn, widgetText);
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+        // Perform this loop procedure for each App Widget that belongs to this provider
+        for (int wId : appWidgetIds) {
+            // Create an Intent to launch ExampleActivity
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.setAction(context.getString(R.string.WIDGET_PRESS_ACTION));
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, reqCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            // Get the layout for the App Widget and attach an on-click listener
+            // to the button
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.device_app_widget);
+            views.setOnClickPendingIntent(R.id.btnAppWidgetBtn, pendingIntent);
+            // Tell the AppWidgetManager to perform an update on the current app widget
+            appWidgetManager.updateAppWidget(wId, views);
         }
+
+    }
+
+    public static void UpdateForced(Context ctx, Intent data){
+        AppWidgetManager man = AppWidgetManager.getInstance(ctx);
+        ComponentName comp = new ComponentName(ctx, DeviceAppWidget.class);
+        int[] ids = man.getAppWidgetIds(comp);
+        RemoteViews views = new RemoteViews(comp.getPackageName(), R.layout.device_app_widget);
+        for (int i : ids){
+            views.setTextViewText(R.id.btnAppWidgetBtn, data.getStringExtra("button_update"));
+            man.updateAppWidget(i, views);
+        }
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
     }
 
     @Override

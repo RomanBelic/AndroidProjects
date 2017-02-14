@@ -19,11 +19,11 @@ public class DeviceListView extends ListView {
     private void init(Context context){
         List<Device> lstData = new ArrayList<Device> (5){
             {
-                add(new Device("toto1@dupon.fr","Toto1"));
-                add(new Device("toto2@dupon.fr","Toto2"));
-                add(new Device("toto3@dupon.fr","Toto3"));
-                add(new Device("toto4@dupon.fr","Toto4"));
-                add(new Device("toto5@dupon.fr","Toto5"));
+                add(new Device(0,"toto1@dupon.fr","Toto1"));
+                add(new Device(0,"toto2@dupon.fr","Toto2"));
+                add(new Device(0,"toto3@dupon.fr","Toto3"));
+                add(new Device(0,"toto4@dupon.fr","Toto4"));
+                add(new Device(0,"toto5@dupon.fr","Toto5"));
             }
         };
 

@@ -3,6 +3,7 @@ package com.esgi.al1.nearbymsg.utils;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -15,6 +16,8 @@ import com.esgi.al1.nearbymsg.R;
 import com.esgi.al1.nearbymsg.interfaces.Callable.AdvertisingDeviceListener;
 import com.esgi.al1.nearbymsg.interfaces.Callable.DiscoveringDeviceListener;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.nearby.Nearby;
@@ -47,7 +50,9 @@ public class NearbyService {
     }
 
     public static void startAdvertisingDevice(Context ctx, GoogleApiClient googleClient,
-                                       ConnectionRequestListener rListener, final AdvertisingDeviceListener callback){
+                                              ConnectionRequestListener rListener,
+                                              final AdvertisingDeviceListener callback,
+                                              String myName){
 
         // Advertising with an AppIdentifer lets other devices on the
         // network discover this application and prompt the user to
@@ -58,11 +63,9 @@ public class NearbyService {
 
         // The advertising timeout is set to run indefinitely
         // Positive values represent timeout in milliseconds
-        long NO_TIMEOUT = 0L;
+        long TIMEOUT = 1000L * 30L;
 
-        String serviceId = ctx.getString(R.string.service_id);
-
-        Nearby.Connections.startAdvertising(googleClient, serviceId, appMetadata, NO_TIMEOUT,
+        Nearby.Connections.startAdvertising(googleClient, myName, appMetadata, TIMEOUT,
                 rListener).setResultCallback(new ResultCallback<StartAdvertisingResult>() {
             @Override
             public void onResult(@NonNull StartAdvertisingResult result) {
@@ -72,19 +75,17 @@ public class NearbyService {
         });
     }
 
-    public static void startDiscoveringDevices(Context ctx, GoogleApiClient googleClient, EndpointDiscoveryListener discListener,
-                                        final DiscoveringDeviceListener callback){
-        String myDeviceID = null;
+    public static void startDiscoveringDevices(String serviceId, GoogleApiClient googleClient, EndpointDiscoveryListener endPListener,
+                                        final DiscoveringDeviceListener discListener){
 
         // Set an appropriate timeout length in milliseconds
         long DISCOVER_TIMEOUT = 1000L;
-
         // Discover nearby apps that are advertising with the required service ID.
-        Nearby.Connections.startDiscovery(googleClient, myDeviceID, DISCOVER_TIMEOUT, discListener)
+        Nearby.Connections.startDiscovery(googleClient, serviceId, DISCOVER_TIMEOUT, endPListener)
             .setResultCallback(new ResultCallback<Status>() {
                 @Override
                 public void onResult(@NonNull Status status) {
-                    callback.onStartDiscoveringDevice(status);
+                    discListener.onStartDiscoveringDevice(status);
                 }
             });
     }
@@ -99,7 +100,5 @@ public class NearbyService {
         }
         return null;
     }
-
-
 
 }

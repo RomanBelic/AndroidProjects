@@ -12,8 +12,15 @@ import android.widget.Button;
 import com.esgi.al1.nearbymsg.R;
 import com.esgi.al1.nearbymsg.entities.Device;
 import com.esgi.al1.nearbymsg.interfaces.Callable.DeviceFragmentListener;
+import com.esgi.al1.nearbymsg.interfaces.Callable.DiscoveringDeviceListener;
 import com.esgi.al1.nearbymsg.ui_adapters.DeviceViewAdapter;
 import com.esgi.al1.nearbymsg.ui_widgets.DeviceListView;
+import com.esgi.al1.nearbymsg.utils.NearbyService;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.nearby.connection.Connections.EndpointDiscoveryListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,28 +29,20 @@ import java.util.List;
  * Created by Romaaan on 23/01/2017.
  */
 
-public class DeviceListFragment extends Fragment {
+public class DeviceListFragment extends Fragment implements DeviceFragmentListener {
 
     public static final String TAG = "DeviceListFrag";
     public static final int Id = 0x99;
-    private DeviceFragmentListener callable;
     private int pageCount;
     private int pageSize;
     private List<Device> lstDevice;
     private DeviceViewAdapter adapter;
+    private DeviceFragmentListener fragCallable;
 
-    public List<Device> getLstDevice() {
-        return lstDevice;
-    }
-
-    public DeviceViewAdapter getAdapter() {
-        return adapter;
-    }
-
-    public static DeviceListFragment createNewInstance(Bundle extras, DeviceFragmentListener callable){
+    public static DeviceListFragment createNewInstance(Bundle extras, DeviceFragmentListener fragCallable){
         DeviceListFragment frag = new DeviceListFragment();
         frag.setArguments(extras);
-        frag.callable = callable;
+        frag.fragCallable = fragCallable;
         return frag;
     }
 
@@ -60,7 +59,7 @@ public class DeviceListFragment extends Fragment {
         pageSize = 5;
         lstDevice = new ArrayList<>(64);
         for (int i = 0; i < 64;i++){
-            lstDevice.add(new Device("i" + i, "i" + i));
+            lstDevice.add(new Device(i, "i" + i, "i" + i));
         }
         DeviceListView lvDevices = (DeviceListView) ui.findViewById(R.id.lstV_AvailableDevices);
         adapter = new DeviceViewAdapter(lstDevice, getActivity(), pageSize);
@@ -79,7 +78,9 @@ public class DeviceListFragment extends Fragment {
                 if (lstChecked.size() > 0) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(Device.Tag,lstChecked);
-                    callable.onDevicesSelected(bundle);
+
+
+
                 }
             }}
         );
@@ -134,7 +135,7 @@ public class DeviceListFragment extends Fragment {
                 pageCount = 0;
                 adapter.setPageIndex(0);
                 adapter.getCheckedArr().clear();
-                List<Device> tmpDevice = new ArrayList(pageSize);
+                List<Device> tmpDevice = new ArrayList<>(pageSize);
                 for (int i = 0; i < pageSize; i++){
                     tmpDevice.add(lstDevice.get(i));
                 }
@@ -145,4 +146,10 @@ public class DeviceListFragment extends Fragment {
 
     }
 
+
+    @Override
+    public void onDeviceFound(Device device) {
+        lstDevice.add(device);
+        adapter.notifyDataSetChanged();
+    }
 }

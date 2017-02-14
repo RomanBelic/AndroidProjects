@@ -52,7 +52,7 @@ public class ActivateNetworkFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
        if (requestCode == reqCode){
-           int result = NearbyService.isConnectedToNetwork(getContext()) ? RESULT_OK : RESULT_CANCELED;
+           int result = NearbyService.isConnectedToNetwork(getActivity()) ? RESULT_OK : RESULT_CANCELED;
            callable.onResult(result);
        }
     }

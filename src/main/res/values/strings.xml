@@ -6,10 +6,15 @@
     <string name="appwidget_StopText">Arrêter</string>
     <string name="appwidget_DeviceFoundText">Appareils trouvés</string>
     <string name="add_widget">Add widget</string>
-    <string name="service_id">NearbyService</string>
+    <string name="service_id">com.esgi.al1.nearbymsg</string>
     <string name="strNoNetworkDetected">Aucun réseau détecté</string>
     <string name="strCheckNetwork">Activer Réseau</string>
     <string name="strNext">Suivant</string>
     <string name="strPrevious">Précéd.</string>
     <string name="strRefesh">Refraichir</string>
+    <string name="strON">ON</string>
+    <string name="strOFF">OFF</string>
+    <string name="WIDGET_RESPONSE_PRESSED">RESPONSE_PRESSED</string>
+    <string name="WIDGET_PRESS_ACTION">WIDGET_PRESSED</string>
+    <string name="On_Message_Received">On_Message_Received</string>
 </resources>
