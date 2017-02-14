@@ -174,16 +174,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onNewIntent(Intent intent) {
-        if (intent.getAction().equals(getString(R.string.WIDGET_PRESS_ACTION))){
-            Intent response = new Intent(getString(R.string.WIDGET_RESPONSE_PRESSED));
+        if (intent.getAction().equals(getString(R.string.service_id))){//WIDGET_PRESS_ACTION
+            Intent response = new Intent(getString(R.string.service_id));//WIDGET_RESPONSE_PRESSED
             if (gClient != null && gClient.isConnected()) {
                 gClient.disconnect();
-                response.putExtra("button_update", getString(R.string.strON));
+                response.putExtra("button_update", getString(R.string.service_id));//strON
                 Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show();
             }
             else if (gClient != null && !gClient.isConnected()) {
                 gClient.connect();
-                response.putExtra("button_update", getString(R.string.strOFF));
+                response.putExtra("button_update", getString(R.string.service_id));//strOFF
                 Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show();
             }
             DeviceAppWidget.UpdateForced(this, response);
