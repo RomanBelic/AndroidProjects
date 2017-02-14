@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements
             msg += (char)b;
         }
         intent.putExtra("message", msg);
-        intent.setAction(getString(R.string.On_Message_Received));
+     //   intent.setAction(getString(R.string.On_Message_Received));
         sendBroadcast(intent);
     }
 
