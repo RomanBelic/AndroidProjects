@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_discussion"
     android:layout_width="match_parent"
@@ -9,5 +10,41 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.esgi.al1.nearbymsg.DiscussionActivity">
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:drawable/ic_menu_send"
+        android:layout_marginBottom="21dp"
+        android:id="@+id/buttonSendId"
+        android:layout_alignTop="@+id/editTextId"
+        style="@android:style/ThemeOverlay.Material.Dark"
+        android:layout_alignParentEnd="true" />
+
+    <ListView
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
+        android:layout_width="match_parent"
+        android:layout_height="80dp" />
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:layout_marginBottom="19dp"
+        android:id="@+id/editTextId"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"></LinearLayout>
 
 </RelativeLayout>
